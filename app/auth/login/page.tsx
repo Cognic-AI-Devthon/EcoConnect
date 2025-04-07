@@ -35,18 +35,22 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle login logic here
-    const resut = await signInWithEmailAndPassword(auth, email, password)
-    console.log(resut)
-    if (resut.user) {
-      // console.log("Login successful")
-      // console.log(resut.user)
-      showToast("Login successful", "success")
-      setEmail("")
-      setPassword("")
-      setShowPassword(false)
-      router.push("/")
-    } else {
-      // console.log("error")
+    try {
+      const resut = await signInWithEmailAndPassword(auth, email, password)
+      if (resut.user) {
+        // console.log("Login successful")
+        // console.log(resut.user)
+        showToast("Login successful", "success")
+        setEmail("")
+        setPassword("")
+        setShowPassword(false)
+        router.push("/")
+      } else {
+        // console.log("error")
+        showToast("Something went wrong", "error")
+      }
+    } catch (error) {
+      // console.log(error)
       showToast("Something went wrong", "error")
     }
 

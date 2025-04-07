@@ -5,11 +5,11 @@ export interface CleanupEvent {
   title: string
   description: string
   image: string
-  date: Timestamp
+  date: string
   time: string
   location: string
   schoolFriendly: boolean
-  uploadDate: Timestamp
+  // uploadDate: Timestamp
   organizedBy: string
   capacity?: number
   meetingPoint?: string

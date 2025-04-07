@@ -39,7 +39,6 @@ export const createCleanupEvent = async (
 
   const newEvent: CleanupEvent = {
     id: eventId,
-    uploadDate: Timestamp.now(),
     image: imageUrl,
     ...eventData,
   }
@@ -65,7 +64,11 @@ export const getAllCleanupEvents = async (): Promise<CleanupEvent[]> => {
   const q = query(eventsCollection, orderBy("date", "asc"))
 
   const querySnapshot = await getDocs(q)
-  return querySnapshot.docs.map((doc) => doc.data() as CleanupEvent)
+  return querySnapshot.docs.map((doc) => {
+    const event = doc.data() as CleanupEvent
+    event.id = doc.id
+    return event
+  })
 }
 
 // Get upcoming cleanup events
