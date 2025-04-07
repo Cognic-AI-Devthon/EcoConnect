@@ -22,7 +22,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">

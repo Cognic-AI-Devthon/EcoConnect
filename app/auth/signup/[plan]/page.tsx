@@ -9,8 +9,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import Sidebar from "@/components/sidebar"
+import { auth } from "../../../../lib/firebase"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { useRouter } from "next/navigation"
 
 export default function SignupPage() {
+  const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -19,15 +23,32 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [agreeToTerms, setAgreeToTerms] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle signup logic here
+    if (password !== confirmPassword) {
+      alert("Passwords do not match")
+      return
+    }
+    if (!agreeToTerms) {
+      alert("You must agree to the terms and conditions")
+      return
+    }
+
+    const res = await createUserWithEmailAndPassword(auth, email, password)
+    console.log(res)
+    if (res.user) {
+      alert("Signup successful")
+      router.push("/auth/login")
+    } else {
+      alert("Something went wrong")
+    }
     console.log("Signup attempt with:", { name, email, password, confirmPassword, agreeToTerms })
   }
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
@@ -154,6 +175,7 @@ export default function SignupPage() {
                   type="submit"
                   className="w-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
                   disabled={!agreeToTerms}
+                  onClick={handleSubmit}
                 >
                   SIGN UP <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

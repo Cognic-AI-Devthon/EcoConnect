@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Check, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function CalculatorResults() {
+  const router = useRouter()
   const [expanded, setExpanded] = useState<string[]>([])
   const [donationAmount, setDonationAmount] = useState("100")
 
@@ -17,6 +19,10 @@ export default function CalculatorResults() {
     } else {
       setExpanded([...expanded, id])
     }
+  }
+
+  const handleSignup = (plan: string) => {
+    router.push(`/auth/signup/${plan}`)
   }
 
   return (
@@ -188,7 +194,7 @@ export default function CalculatorResults() {
                         <span className="text-sm">Eco-friendly badge</span>
                       </li>
                     </ul>
-                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white">Choose Plan</Button>
+                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => handleSignup("Supporter")}>Choose Plan</Button>
                   </div>
                 </div>
 
@@ -218,7 +224,7 @@ export default function CalculatorResults() {
                         <span className="text-sm">Premium community access</span>
                       </li>
                     </ul>
-                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white">Choose Plan</Button>
+                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => handleSignup("Advocate")}>Choose Plan</Button>
                   </div>
                 </div>
 
@@ -248,7 +254,7 @@ export default function CalculatorResults() {
                         <span className="text-sm">VIP community access</span>
                       </li>
                     </ul>
-                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white">Choose Plan</Button>
+                    <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => handleSignup("Protector")}>Choose Plan</Button>
                   </div>
                 </div>
               </div>
