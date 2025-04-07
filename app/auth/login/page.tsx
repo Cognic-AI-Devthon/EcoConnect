@@ -7,22 +7,68 @@ import Link from "next/link"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "../../../lib/firebase"
+import { useRouter } from "next/navigation"
 import Sidebar from "@/components/sidebar"
+import Toast2 from "@/components/ui/custom_toast"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
+  const router = useRouter()
   const [password, setPassword] = useState("")
+  const [toastMesaage, setToastMessage] = useState("")
+  const [toastOpen, setToastOpen] = useState(false)
+  const [toastType, setToastType] = useState<"success" | "error" | "info">("info");
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToastMessage(message);
+    setToastType(type);
+    setToastOpen(true);
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      setToastOpen(false);
+    }, 2000);
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle login logic here
+    const resut = await signInWithEmailAndPassword(auth, email, password)
+    console.log(resut)
+    if (resut.user) {
+      // console.log("Login successful")
+      // console.log(resut.user)
+      showToast("Login successful", "success")
+      setEmail("")
+      setPassword("")
+      setShowPassword(false)
+      router.push("/")
+    } else {
+      // console.log("error")
+      showToast("Something went wrong", "error")
+    }
+
     console.log("Login attempt with:", { email, password })
   }
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
       {/* <Sidebar /> */}
+      {/* <button
+        onClick={() => showToast("Test toast!", "success")}
+        className="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Test Toast
+      </button> */}
+      {toastOpen && (
+        <Toast2
+          message={toastMesaage}
+          type={toastType}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
 
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
@@ -87,6 +133,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="w-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
+                  onClick={handleSubmit}
                 >
                   SIGN IN <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
