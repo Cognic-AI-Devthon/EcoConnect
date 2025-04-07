@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { getAllCleanupEvents } from "../../lib/db/cleanupEvents"
 import { CleanupEvent } from "../../types/cleanupEvent"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { set } from "date-fns"
 
 export default function CleanupEventsPage() {
@@ -14,6 +15,7 @@ export default function CleanupEventsPage() {
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [isSchoolFriendly, setIsSchoolFriendly] = useState(true)
+  const router = useRouter()
   const [permenantData, setPermanentData] = useState<CleanupEvent[]>([])
   // const [distance, setDistance] = useState("Within 2 miles")
   const [isLoading, setIsLoading] = useState(false)
@@ -64,6 +66,10 @@ export default function CleanupEventsPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleNavigate = (eventId: string) => {
+    router.push(`/events/${eventId}`)
   };
 
   useEffect(() => {
@@ -239,8 +245,8 @@ export default function CleanupEventsPage() {
 
         {/* Events List */}
         <div className="container mx-auto py-12 px-6">
-          {cleanupEvents.map((event: { id: Key | null | undefined; image: any; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; schoolFriendly: any; organizedBy: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }) => (
-            <div key={event.id} className="mb-12 border-b border-gray-200 pb-12 last:border-0">
+          {cleanupEvents.map((event: { id: string; image: any; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; schoolFriendly: any; organizedBy: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }) => (
+            <div key={event.id} className="mb-12 border-b border-gray-200 pb-12 last:border-0" onClick={() => { handleNavigate(event.id) }}>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/4 mb-4 md:mb-0">
                   <Image
