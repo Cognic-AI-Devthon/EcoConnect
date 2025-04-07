@@ -22,7 +22,7 @@ const registrationsCollection = collection(db, "eventRegistrations")
 
 // Create a new cleanup event
 export const createCleanupEvent = async (
-  eventData: Omit<CleanupEvent, "id" | "uploadDate">,
+  eventData: Omit<CleanupEvent, "id" | "image">,
   imageFile?: File,
 ): Promise<string> => {
   const eventId = uuidv4()
