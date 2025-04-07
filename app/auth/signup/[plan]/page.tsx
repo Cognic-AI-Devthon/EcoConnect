@@ -9,8 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import Sidebar from "@/components/sidebar"
+import { auth } from "../../../../lib/firebase"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { useRouter } from "next/navigation"
+import Toast2 from "@/components/ui/custom_toast"
 
 export default function SignupPage() {
+  const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -18,16 +23,67 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [agreeToTerms, setAgreeToTerms] = useState(false)
+  const [toastMesaage, setToastMessage] = useState("")
+  const [toastOpen, setToastOpen] = useState(false)
+  const [toastType, setToastType] = useState<"success" | "error" | "info">("info");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToastMessage(message);
+    setToastType(type);
+    setToastOpen(true);
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      setToastOpen(false);
+      if (type === "success") {
+        router.push("/auth/login")
+      }
+    }, 2000);
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle signup logic here
+    if (password !== confirmPassword) {
+      // alert("Passwords do not match")
+      showToast("Passwords do not match", "error")
+      return
+    }
+    if (!agreeToTerms) {
+      // alert("You must agree to the terms and conditions")
+      showToast("You must agree to the terms and conditions", "error")
+      return
+    }
+
+    const res = await createUserWithEmailAndPassword(auth, email, password)
+    console.log(res)
+    if (res.user) {
+      // alert("Signup successful")
+      showToast("Signup successful", "success")
+      setName("")
+      setEmail("")
+      setPassword("")
+      setConfirmPassword("")
+      setAgreeToTerms(false)
+      setShowPassword(false)
+      setShowConfirmPassword(false)
+      router.push("/auth/login")
+    } else {
+      // alert("Something went wrong")
+      showToast("Something went wrong", "error")
+    }
     console.log("Signup attempt with:", { name, email, password, confirmPassword, agreeToTerms })
   }
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      <Sidebar />
+      {/* <Sidebar /> */}
+      {toastOpen && (
+        <Toast2
+          message={toastMesaage}
+          type={toastType}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
 
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
@@ -154,6 +210,7 @@ export default function SignupPage() {
                   type="submit"
                   className="w-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
                   disabled={!agreeToTerms}
+                  onClick={handleSubmit}
                 >
                   SIGN UP <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

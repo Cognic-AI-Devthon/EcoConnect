@@ -1,21 +1,23 @@
 "use client"
 
-import { useState } from "react"
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react"
 import { Calendar, Clock, MapPin, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { getAllCleanupEvents } from "../../lib/db/cleanupEvents"
+import { CleanupEvent } from "../../types/cleanupEvent"
 // import Sidebar from "@/components/sidebar"
 
-type CleanupEvent = {
-  id: number
-  title: string
-  date: string
-  time: string
-  location: string
-  image: string
-  schoolFriendly: boolean
-  organizer: string
-}
+// type CleanupEvent = {
+//   id: number
+//   title: string
+//   date: string
+//   time: string
+//   location: string
+//   image: string
+//   schoolFriendly: boolean
+//   organizer: string
+// }
 
 export default function CleanupEventsPage() {
   const [location, setLocation] = useState("")
@@ -24,63 +26,63 @@ export default function CleanupEventsPage() {
   const [isSchoolFriendly, setIsSchoolFriendly] = useState(false)
   const [distance, setDistance] = useState("Within 2 miles")
 
-  const cleanupEvents: CleanupEvent[] = [
+  const [cleanupEvents, setCleanupEvents] = useState([
     {
-      id: 1,
+      id: "sdgfhjkl",
       title: "Galkissa Beach Clean up",
       date: "22 MAR 2025",
+      description: "",
       time: "11 A.M. - 12:30 P.M.",
       location: "NEW BRIGHTON, MERSEYSIDE",
       image: "/placeholder.svg?height=200&width=300",
       schoolFriendly: true,
-      organizer: "ROTARAC SOCIETY, UNIVERSITY OF MORATUWA",
+      organizedBy: "ROTARAC SOCIETY, UNIVERSITY OF MORATUWA",
     },
     {
-      id: 2,
+      id: "ghjklkjh",
       title: "Aberdeen City Beach - North End",
       date: "23 MAR 2025",
+      description: "",
       time: "2:00 P.M. - 4:30 P.M.",
       location: "ABERDEEN NORTH NI, ABERDEEN CITY",
       image: "/placeholder.svg?height=200&width=300",
       schoolFriendly: false,
-      organizer: "ZERO PLASTIC MOVEMENT",
+      organizedBy: "ZERO PLASTIC MOVEMENT",
     },
     {
-      id: 3,
+      id: "gfhjkl;",
       title: "Community Clean Up, West Links Park & Beach.",
       date: "28 MAR 2025",
+      description: "",
       time: "7 A.M. - 1 P.M.",
       location: "ARBROATH WEST LINKS, ANGUS",
       image: "/placeholder.svg?height=200&width=300",
       schoolFriendly: true,
-      organizer: "ARBROATH COMMUNITY",
-    },
-    {
-      id: 4,
-      title: "Slapton Sands Great British Spring Clean",
-      date: "22 MAR 2025",
-      time: "11 A.M. - 12:30 P.M.",
-      location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=200&width=300",
-      schoolFriendly: true,
-      organizer: "ROTARAC SOCIETY, UNIVERSITY OF MORATUWA",
-    },
-    {
-      id: 5,
-      title: "Great British Spring Clean beach clean and litter survey - New Brighton!",
-      date: "22 MAR 2025",
-      time: "11 A.M. - 12:30 P.M.",
-      location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=200&width=300",
-      schoolFriendly: true,
-      organizer: "ROTARAC SOCIETY, UNIVERSITY OF MORATUWA",
-    },
-  ]
+      organizedBy: "ARBROATH COMMUNITY",
+    }
+  ])
 
   const handleSearch = () => {
     // In a real app, this would filter the events based on the search criteria
     console.log("Searching for events with:", { location, startDate, endDate, isSchoolFriendly, distance })
   }
+
+  useEffect(() => {
+    initializeData()
+  }
+  ), []
+
+
+  const initializeData = async () => {
+    try {
+      const res = await getAllCleanupEvents()
+      console.log(res)
+      setCleanupEvents(res as CleanupEvent[])
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -198,11 +200,11 @@ export default function CleanupEventsPage() {
 
         {/* Events List */}
         <div className="container mx-auto py-12 px-6">
-          {cleanupEvents.map((event) => (
+          {cleanupEvents.map((event: { id: Key | null | undefined; image: any; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; schoolFriendly: any; organizedBy: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }) => (
             <div key={event.id} className="mb-12 border-b border-gray-200 pb-12 last:border-0">
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/4 mb-4 md:mb-0">
-                  <img src={event.image || "/placeholder.svg"} alt={event.title} className="w-full h-auto rounded-lg" />
+                  <img src={event.image || "/placeholder.svg"} className="w-full h-auto rounded-lg" />
                 </div>
 
                 <div className="md:ml-6 flex-1">
@@ -234,7 +236,7 @@ export default function CleanupEventsPage() {
 
                   <div className="mb-4">
                     <p className="text-sm text-gray-600">Organized by:</p>
-                    <p className="font-medium">{event.organizer}</p>
+                    <p className="font-medium">{event.organizedBy}</p>
                   </div>
                 </div>
               </div>
