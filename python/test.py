@@ -2,7 +2,7 @@ import requests
 
 def chat_with_bot():
     # Initialize chat session
-    url = "http://localhost:8000/chat"
+    url = "http://localhost:8001/chat"
     session = requests.Session()
     
     print("Chat with the cricket team selection assistant (type 'quit' to exit)")

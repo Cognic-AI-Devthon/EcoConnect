@@ -50,7 +50,7 @@ def chat_with_llm(user_message: str):
             {"output": f"{conversation_summary}"}
         )
         
-        return final_response
+        return final_response.text
         
     except Exception as e:
         raise Exception(f"Error in chat processing: {str(e)}")
