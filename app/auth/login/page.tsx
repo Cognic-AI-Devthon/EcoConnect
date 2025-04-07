@@ -41,6 +41,7 @@ export default function LoginPage() {
         // console.log("Login successful")
         // console.log(resut.user)
         showToast("Login successful", "success")
+        localStorage.setItem("user", JSON.stringify(resut.user))
         setEmail("")
         setPassword("")
         setShowPassword(false)

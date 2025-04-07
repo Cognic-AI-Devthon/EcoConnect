@@ -6,71 +6,76 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { getAllCleanupEvents } from "../../lib/db/cleanupEvents"
 import { CleanupEvent } from "../../types/cleanupEvent"
-// import Sidebar from "@/components/sidebar"
-
-// type CleanupEvent = {
-//   id: number
-//   title: string
-//   date: string
-//   time: string
-//   location: string
-//   image: string
-//   schoolFriendly: boolean
-//   organizer: string
-// }
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { set } from "date-fns"
 
 export default function CleanupEventsPage() {
   const [location, setLocation] = useState("")
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
-  const [isSchoolFriendly, setIsSchoolFriendly] = useState(false)
-  const [distance, setDistance] = useState("Within 2 miles")
+  const [isSchoolFriendly, setIsSchoolFriendly] = useState(true)
+  const router = useRouter()
+  const [permenantData, setPermanentData] = useState<CleanupEvent[]>([])
+  // const [distance, setDistance] = useState("Within 2 miles")
+  const [isLoading, setIsLoading] = useState(false)
+  // const [events, setEvents]]
 
-  const [cleanupEvents, setCleanupEvents] = useState([
-    {
-      id: "sdgfhjkl",
-      title: "Galkissa Beach Clean up",
-      date: "22 MAR 2025",
-      description: "",
-      time: "11 A.M. - 12:30 P.M.",
-      location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=200&width=300",
-      schoolFriendly: true,
-      organizedBy: "ROTARAC SOCIETY, UNIVERSITY OF MORATUWA",
-    },
-    {
-      id: "ghjklkjh",
-      title: "Aberdeen City Beach - North End",
-      date: "23 MAR 2025",
-      description: "",
-      time: "2:00 P.M. - 4:30 P.M.",
-      location: "ABERDEEN NORTH NI, ABERDEEN CITY",
-      image: "/placeholder.svg?height=200&width=300",
-      schoolFriendly: false,
-      organizedBy: "ZERO PLASTIC MOVEMENT",
-    },
-    {
-      id: "gfhjkl;",
-      title: "Community Clean Up, West Links Park & Beach.",
-      date: "28 MAR 2025",
-      description: "",
-      time: "7 A.M. - 1 P.M.",
-      location: "ARBROATH WEST LINKS, ANGUS",
-      image: "/placeholder.svg?height=200&width=300",
-      schoolFriendly: true,
-      organizedBy: "ARBROATH COMMUNITY",
-    }
-  ])
+  const [cleanupEvents, setCleanupEvents] = useState<CleanupEvent[]>([])
 
   const handleSearch = () => {
-    // In a real app, this would filter the events based on the search criteria
-    console.log("Searching for events with:", { location, startDate, endDate, isSchoolFriendly, distance })
-  }
+    setIsLoading(true);
+
+    try {
+      // Filter events based on search criteria
+      const filteredEvents = permenantData.filter(event => {
+        // Filter by location (case insensitive partial match)
+        const locationMatch = location === "" ||
+          event.location.toLowerCase().includes(location.toLowerCase());
+
+        // Filter by date range
+        const eventDate = new Date(event.date).getTime();
+        const startDateMatch = startDate === "" ||
+          eventDate >= new Date(startDate).getTime();
+        const endDateMatch = endDate === "" ||
+          eventDate <= new Date(endDate).getTime();
+
+        // Filter by school friendly
+        const schoolFriendlyMatch = isSchoolFriendly === event.schoolFriendly;
+
+        // Filter by distance (assuming event has a distance property)
+        // const distanceValue = parseInt(distance.match(/\d+/)?.[0] || "2");
+        // const distanceMatch = event. <= distanceValue;
+
+        return locationMatch && startDateMatch && endDateMatch &&
+          schoolFriendlyMatch;
+      });
+
+      console.log("Filtered events:", filteredEvents);
+      // In a real app, you might want to set these filtered events to state
+      // setCleanupEvents(filteredEvents);
+
+      // For now, we'll just log them
+      // return filteredEvents;
+      setCleanupEvents(filteredEvents);
+      setIsLoading(false);
+
+    } catch (error) {
+      console.error("Error filtering events:", error);
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleNavigate = (eventId: string) => {
+    router.push(`/events/${eventId}`)
+  };
 
   useEffect(() => {
-    initializeData()
-  }
-  ), []
+    setIsLoading(true)
+    initializeData();
+  }, []);
 
 
   const initializeData = async () => {
@@ -78,9 +83,49 @@ export default function CleanupEventsPage() {
       const res = await getAllCleanupEvents()
       console.log(res)
       setCleanupEvents(res as CleanupEvent[])
+      setPermanentData(res as CleanupEvent[])
+
+      // Find all valid dates from the events
+      const validDates = res
+        .map(event => event.date) // assuming each event has a 'date' property
+        .filter(date => date) // remove null/undefined
+        .map(date => new Date(date)); // convert to Date objects
+
+      if (validDates.length > 0) {
+        // Find the earliest date (minimum)
+        const earliestDate = new Date(Math.min(...validDates.map(date => date.getTime())));
+        // Find the latest date (maximum)
+        const latestDate = new Date(Math.max(...validDates.map(date => date.getTime())));
+
+        // Format as YYYY-MM-DD
+        setStartDate(earliestDate.toISOString().slice(0, 10));
+        setEndDate(latestDate.toISOString().slice(0, 10));
+      } else {
+        // Default to today if no dates found
+        const today = new Date().toISOString().slice(0, 10);
+        setStartDate(today);
+        setEndDate(today);
+      }
     } catch (e) {
       console.log(e)
+      const today = new Date().toISOString().slice(0, 10);
+      setStartDate(today);
+      setEndDate(today);
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#f5f5f5]">
+      <div className="flex-1">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-gray-300 border-t-green-500 rounded-full animate-spin"></div>
+          </div>
+        )}
+      </div>
+    </div>
   }
 
 
@@ -112,16 +157,16 @@ export default function CleanupEventsPage() {
                     className="w-full bg-white text-black"
                   />
                 </div>
-                <div className="relative">
+                {/* <div className="relative">
                   <select
                     value={distance}
                     onChange={(e) => setDistance(e.target.value)}
-                    className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-800"
                   >
-                    <option>Within 2 miles</option>
-                    <option>Within 5 miles</option>
-                    <option>Within 10 miles</option>
-                    <option>Within 20 miles</option>
+                    <option className="text-gray-800 hover:bg-green-100">Within 2 miles</option>
+                    <option className="text-gray-800 hover:bg-green-100">Within 5 miles</option>
+                    <option className="text-gray-800 hover:bg-green-100">Within 10 miles</option>
+                    <option className="text-gray-800 hover:bg-green-100">Within 20 miles</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <svg
@@ -137,7 +182,7 @@ export default function CleanupEventsPage() {
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -200,11 +245,18 @@ export default function CleanupEventsPage() {
 
         {/* Events List */}
         <div className="container mx-auto py-12 px-6">
-          {cleanupEvents.map((event: { id: Key | null | undefined; image: any; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; schoolFriendly: any; organizedBy: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }) => (
-            <div key={event.id} className="mb-12 border-b border-gray-200 pb-12 last:border-0">
+          {cleanupEvents.map((event: { id: string; image: any; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; schoolFriendly: any; organizedBy: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }) => (
+            <div key={event.id} className="mb-12 border-b border-gray-200 pb-12 last:border-0" onClick={() => { handleNavigate(event.id) }}>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/4 mb-4 md:mb-0">
-                  <img src={event.image || "/placeholder.svg"} className="w-full h-auto rounded-lg" />
+                  <Image
+                    src={event.image}
+                    alt="Event Image"
+                    width={400}
+                    height={200}
+                    objectFit="cover"
+                    className="w-full h-auto rounded-lg"
+                  />
                 </div>
 
                 <div className="md:ml-6 flex-1">
@@ -244,7 +296,7 @@ export default function CleanupEventsPage() {
           ))}
 
           {/* Pagination */}
-          <div className="flex justify-center items-center mt-8">
+          {/* <div className="flex justify-center items-center mt-8">
             <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center mr-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +337,7 @@ export default function CleanupEventsPage() {
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

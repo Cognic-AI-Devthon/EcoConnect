@@ -5,6 +5,7 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Twitter, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getCleanupEventById } from "../../../lib/db/cleanupEvents"
 import Sidebar from "@/components/sidebar"
 
 type EventDetails = {
@@ -38,51 +39,29 @@ export default function EventDetailsPage() {
 
   const [event, setEvent] = useState<EventDetails | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mockEvent, setMockEvent] = useState<EventDetails | null>(null)
 
   useEffect(() => {
-    // In a real app, this would be an API call
-    // For demo purposes, we'll create a mock event
-    const mockEvent: EventDetails = {
-      id: id as string,
-      title: "TACT Team Spring Clean at Escart Bay - part 1",
-      description:
-        "Join this beach clean to help us stop harmful litter from reaching the ocean and collect vital data that we can use to bring about positive change for our seas.",
-      image: "/placeholder.svg?height=400&width=800",
-      organizer: {
-        name: "Kirsti Polsley",
-        avatar: "/placeholder.svg?height=60&width=60",
-      },
-      details: {
-        beachStretch: "Escart Bay",
-        dateTime: "23 Mar 2025, 1:30 p.m. to 4:30 p.m.",
-        meetingPoint: "Meet at the signposted car park 500m south of Carrick Cemetery on the A83.",
-        capacity: "30 volunteers - 29 spaces left",
-        schoolFriendly: false,
-      },
-      instructions: [
-        "Please wear sturdy waterproof footwear and clothing, and bring some gardening gloves if you have them.",
-        "If you are under 16 you need to bring a parent/guardian with you.",
-        "Sorry no dogs.",
-      ],
-      requirements: {
-        toBring:
-          "We'd recommend you pack a rucksack with a few essentials like sunscreen, waterproofs, hand sanitiser, and perhaps some snacks and a drink (in a reusable bottle, of course).",
-        toWear:
-          "If you're picking up litter with your hands it's worth wearing a strong pair of gloves - like gardening gloves - just to make sure you're protected. Sturdy shoes are a must for protection too.",
-        underAge:
-          "To comply with our insurance, volunteers under 16 will need to be accompanied by an adult who will be asked to sign a parental / guardian consent form on the day by the beach clean organiser.",
-      },
-      spacesRemaining: 29,
-    }
-
-    setEvent(mockEvent)
-    setLoading(false)
+    setLoading(true)
+    initializedData()
   }, [id])
+
+  const initializedData = async () => {
+    try {
+      const res = await getCleanupEventById(id as string)
+      console.log(res)
+
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (loading) {
     return (
       <div className="flex min-h-screen bg-[#f5f5f5]">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="flex-1 p-6">
           <div className="max-w-3xl mx-auto">
             <div className="animate-pulse">
@@ -102,7 +81,7 @@ export default function EventDetailsPage() {
   if (!event) {
     return (
       <div className="flex min-h-screen bg-[#f5f5f5]">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="flex-1 p-6">
           <div className="max-w-3xl mx-auto text-center py-12">
             <h1 className="text-2xl font-bold mb-4">Event Not Found</h1>
@@ -118,7 +97,7 @@ export default function EventDetailsPage() {
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <main className="flex-1">
         {/* Hero Section */}

@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Home, User, Users, ShoppingBag, BookOpen, MessageCircle, Map, Trash2, Leaf, Calculator } from "lucide-react"
+import { Home, User, Users, ShoppingBag, BookOpen, MessageCircle, Map, Trash2, Leaf, Calculator, LogOut, LogIn, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { auth } from "../lib/firebase"
+import { Toast } from "@radix-ui/react-toast"
+import Toast2 from "./ui/custom_toast"
 
 const navItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -18,12 +21,71 @@ const navItems = [
 ]
 
 export default function Sidebar() {
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(() => {
+    // Initialize from localStorage if available
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('sidebarExpanded') !== 'false'
+    }
+    return true
+  })
+  const [user, setUser] = useState<string | null>(null)
+  const [toastMesaage, setToastMessage] = useState("")
+  const [toastOpen, setToastOpen] = useState(false)
+  const [toastType, setToastType] = useState<"success" | "error" | "info">("info");
 
-  // Update document with current sidebar state for responsive layout
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToastMessage(message);
+    setToastType(type);
+    setToastOpen(true);
+
+    // Auto-hide after 2 seconds
+    setTimeout(() => {
+      setToastOpen(false);
+    }, 2000);
+  };
+
+  // Handle auth state and localStorage changes
   useEffect(() => {
-    document.documentElement.style.setProperty("--sidebar-width", expanded ? "256px" : "64px")
+    // Set initial auth state
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user.uid)
+        localStorage.setItem('user', user.uid)
+      } else {
+        setUser(null)
+        localStorage.removeItem('user')
+      }
+    })
+
+    // Listen for localStorage changes from other tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'user') {
+        setUser(e.newValue)
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    // Save sidebar state to localStorage
+    localStorage.setItem('sidebarExpanded', String(expanded))
+
+    return () => {
+      unsubscribe()
+      window.removeEventListener('storage', handleStorageChange)
+    }
   }, [expanded])
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut()
+      localStorage.removeItem('user')
+      setUser(null)
+      showToast("Sign out successful", "success")
+      // No need to reload - auth state change will trigger update
+    } catch (error) {
+      console.error('Sign out error:', error)
+    }
+  }
 
   return (
     <div
@@ -32,6 +94,13 @@ export default function Sidebar() {
         expanded ? "w-64" : "w-16",
       )}
     >
+      {toastOpen && (
+        <Toast2
+          message={toastMesaage}
+          type={toastType}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
       <div className="p-4 flex items-center justify-center">
         <Link href="/">
           <div className="flex items-center">
@@ -57,6 +126,7 @@ export default function Sidebar() {
               </Link>
             </li>
           ))}
+
           <li>
             <Link
               href="/contactUs"
@@ -69,19 +139,38 @@ export default function Sidebar() {
               {expanded && <span className="ml-3">Contact Us</span>}
             </Link>
           </li>
+
+          {user ? (
+            <li>
+              <button
+                onClick={handleSignOut}
+                className={cn(
+                  "flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors",
+                  !expanded && "justify-center"
+                )}
+              >
+                <LogOut className={cn("flex-shrink-0", expanded ? "h-5 w-5" : "h-7 w-7")} />
+                {expanded && <span className="ml-3">Sign Out</span>}
+              </button>
+            </li>
+          ) : (
+            <li>
+              <Link
+                href="/auth/login"
+                className={cn(
+                  "flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-600 transition-colors",
+                  !expanded && "justify-center"
+                )}
+              >
+                <LogIn className={cn("flex-shrink-0", expanded ? "h-5 w-5" : "h-7 w-7")} />
+                {expanded && <span className="ml-3">Sign In</span>}
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center justify-center p-2 text-gray-500 hover:text-green-600 transition-colors"
-          aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
-        >
-          {expanded ? "<<" : ">>"}
-        </button>
-      </div>
+
     </div>
   )
 }
-
