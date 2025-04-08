@@ -2,11 +2,12 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Send, Paperclip, Mic, ThumbsUp, ThumbsDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import LanguageSelector from "@/components/eco-assist/language-selector"
+import { useRouter } from "next/navigation"
 
 type Message = {
   id: string
@@ -24,6 +25,8 @@ export default function EcoAssistPage() {
       timestamp: new Date(),
     },
   ])
+  const router = useRouter()
+
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
 
@@ -86,6 +89,12 @@ export default function EcoAssistPage() {
     "What are eco-friendly alternatives to plastic?",
   ]
 
+  useEffect(() => {
+    if (localStorage.getItem("user") === null) {
+      router.push("/auth/login")
+    }
+  }, []);
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -102,11 +111,10 @@ export default function EcoAssistPage() {
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[70%] rounded-lg p-4 ${
-                    message.sender === "user"
-                      ? "bg-green-500 text-white rounded-tr-none"
-                      : "bg-white shadow-sm text-gray-800 rounded-tl-none"
-                  }`}
+                  className={`max-w-[70%] rounded-lg p-4 ${message.sender === "user"
+                    ? "bg-green-500 text-white rounded-tr-none"
+                    : "bg-white shadow-sm text-gray-800 rounded-tl-none"
+                    }`}
                 >
                   <p>{message.content}</p>
                   <div className="mt-2 text-xs opacity-70 flex justify-between items-center">

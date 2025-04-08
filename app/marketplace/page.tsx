@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Search, ShoppingCart, Heart, ChevronRight, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export default function MarketplacePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
-
+  const router = useRouter()
   const featuredProducts = [
     {
       id: 1,
@@ -149,6 +150,12 @@ export default function MarketplacePage() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)
   }
+
+  useEffect(() => {
+    if (localStorage.getItem("user") === null) {
+      router.push("/auth/login")
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
