@@ -76,10 +76,16 @@ We welcome contributions to EcoConnect! To contribute:
 ### License
 This project is licensed under the MIT License.
 
+### Team Members
+- Nishan Kavinda
+- Akindu Himan
+- Bashitha Shamila
+- Bishma Jayasundara
+- Dilhara Disanayaka
+
 ### Contact
 For any inquiries or support, please contact us at:
-
-Email: cognicai@gmail.com
+Email: cognicai@gmail.com 
 
 ### Acknowledgments
 Special thanks to all contributors and supporters who make EcoConnect possible!
