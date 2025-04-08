@@ -28,7 +28,7 @@ export default function Statistics() {
           <div className="relative w-80 h-80 rounded-full bg-blue-100 overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/placeholder.svg?height=320&width=320')" }}
+              style={{ backgroundImage: "url('/turtlevector.png?height=320&width=320')" }}
             />
           </div>
         </div>

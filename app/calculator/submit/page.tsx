@@ -96,7 +96,7 @@ export default function SubmitAnswersPage() {
 
           <div className="relative">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-OEES22tWdBKmwCV83gGPU5fCgWvBJH.png"
+              src="/finish.png"
               alt="Ocean plastic illustration"
               className="w-full h-auto rounded-lg"
               style={{ maxHeight: "400px", objectFit: "contain" }}

@@ -148,12 +148,12 @@ export default function LoginPage() {
 
               <div className="mt-6 space-y-3">
                 <button className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  <img src="/placeholder.svg?height=20&width=20" alt="Google" className="h-5 w-5 mr-2" />
+                  <img src="/google.svg?height=20&width=20" alt="Google" className="h-5 w-5 mr-2" />
                   Login with Google
                 </button>
 
                 <button className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  <img src="/placeholder.svg?height=20&width=20" alt="Apple" className="h-5 w-5 mr-2" />
+                  <img src="/apple.svg?height=20&width=20" alt="Apple" className="h-5 w-5 mr-2" />
                   Login with Apple
                 </button>
               </div>

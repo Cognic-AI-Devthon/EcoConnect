@@ -205,7 +205,7 @@ export default function ContactUsPage() {
               </svg>
             </div>
             <h3 className="font-semibold text-lg mb-2">Phone</h3>
-            <p className="text-gray-600">+1 (555) 123-4567</p>
+            <p className="text-gray-600">+94 71 239 4567</p>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-sm text-center">

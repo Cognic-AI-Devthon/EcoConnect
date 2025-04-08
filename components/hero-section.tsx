@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const images = [
-  "/placeholder.svg?height=500&width=800",
-  "/placeholder.svg?height=500&width=800",
-  "/placeholder.svg?height=500&width=800",
-  "/placeholder.svg?height=500&width=800",
-  "/placeholder.svg?height=500&width=800",
+  "/bottle.jpg?height=500&width=800",
+  "/river.jpg?height=500&width=800",
+  "/elephants.jpeg?height=500&width=800",
+  "/oceanplastic.jpg?height=500&width=800",
+  "/turtle.png?height=500&width=800",
 ]
 
 export default function HeroSection() {
@@ -59,8 +59,10 @@ export default function HeroSection() {
           From little actions, great revolutions are born.
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mb-8">
-          Track, reduce, and manage your plastic footprint to contribute towards 10 protected oceans.
+          Track, reduce, and manage your plastic footprint effortlessly with{" "}
+          <span className="block">AI-powered tools.</span>
         </p>
+
         <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 text-lg rounded-full" onClick={handleClick}>
           Get Started
         </Button>

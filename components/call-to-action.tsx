@@ -17,30 +17,15 @@ export default function CallToAction() {
   return (
     <section className="py-16 text-center">
       <div className="mb-6">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <img
+          src="/ecoconnetwhale.png"
+          alt="Icon"
           className="mx-auto text-blue-500"
-        >
-          <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12s4.48 10 10 10 10-4.48 10-10z"></path>
-          <path d="M12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z"></path>
-          <path d="M12 2v2"></path>
-          <path d="M12 20v2"></path>
-          <path d="M6.34 6.34l1.42 1.42"></path>
-          <path d="M16.24 16.24l1.42 1.42"></path>
-          <path d="M2 12h2"></path>
-          <path d="M20 12h2"></path>
-          <path d="M6.34 17.66l1.42-1.42"></path>
-          <path d="M16.24 7.76l1.42-1.42"></path>
-        </svg>
+          width="150"
+          height="150"
+        />
       </div>
+
 
       <h2 className="text-2xl font-bold mb-4">Start Your Sustainability Journey Today.</h2>
       <p className="text-gray-600 max-w-md mx-auto mb-6">Take your first step towards a future with EcoConnect!</p>

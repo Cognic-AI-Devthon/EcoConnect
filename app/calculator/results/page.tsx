@@ -37,7 +37,7 @@ export default function CalculatorResults() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
-                <img src="/placeholder.svg?height=60&width=60" alt="Results icon" className="h-14 w-14" />
+                <img src="/jellyfish.png?height=60&width=60" alt="Results icon" className="h-14 w-14" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold mb-2">Your plastic footprint is 0.3 kg of plastic.</h1>
               <p className="text-gray-600">Here's what that means:</p>
@@ -79,7 +79,7 @@ export default function CalculatorResults() {
                 <h2 className="text-lg font-semibold mb-4">Your annual emissions are equivalent to...</h2>
 
                 <div className="flex items-center p-4 bg-yellow-50 rounded-lg mb-4">
-                  <img src="/placeholder.svg?height=60&width=60" alt="Supermarket trolley" className="h-14 w-14 mr-4" />
+                  <img src="/trolly.png?height=100&width=100" alt="Supermarket trolley" className="h-14 w-14 mr-4" />
                   <div>
                     <h3 className="font-medium">57 supermarket trolleys—</h3>
                     <p className="text-sm text-gray-600">Imagine a whole row of them filled with plastic!</p>
@@ -132,7 +132,7 @@ export default function CalculatorResults() {
 
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center mb-4">
-                  <img src="/placeholder.svg?height=60&width=60" alt="Ocean icon" className="h-14 w-14 mr-4" />
+                  <img src="/plasticbottle2.png?height=60&width=60" alt="Ocean icon" className="h-14 w-10 mr-4" />
                   <div>
                     <h2 className="text-lg font-semibold">By 2050, plastic waste tonnage will in the sea</h2>
                   </div>
@@ -140,9 +140,9 @@ export default function CalculatorResults() {
 
                 <div className="h-48 bg-blue-50 rounded-lg flex items-center justify-center">
                   <img
-                    src="/placeholder.svg?height=120&width=120"
+                    src="/result2.png?"
                     alt="Ocean plastic visualization"
-                    className="h-32 w-32"
+                    className="h-40 w-100"
                   />
                 </div>
               </div>
@@ -161,7 +161,6 @@ export default function CalculatorResults() {
                 </div>
                 <div className="flex items-center">
                   <Button className="bg-green-500 hover:bg-green-600 text-white mr-4">Learn More</Button>
-                  <div className="bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-bold">30% OFF</div>
                 </div>
               </div>
             </div>
@@ -303,7 +302,7 @@ export default function CalculatorResults() {
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <div className="h-40 relative">
                     <img
-                      src="/placeholder.svg?height=160&width=300"
+                      src="/cleanup.png?height=160&width=300"
                       alt="Community cleanup"
                       className="w-full h-full object-cover"
                     />
@@ -319,7 +318,7 @@ export default function CalculatorResults() {
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <div className="h-40 relative">
                     <img
-                      src="/placeholder.svg?height=160&width=300"
+                      src="/recycling-innovations.png?height=160&width=300"
                       alt="Recycling innovation"
                       className="w-full h-full object-cover"
                     />
@@ -335,7 +334,7 @@ export default function CalculatorResults() {
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <div className="h-40 relative">
                     <img
-                      src="/placeholder.svg?height=160&width=300"
+                      src="/oceancleanups.jpg?height=160&width=300"
                       alt="Ocean cleanup"
                       className="w-full h-full object-cover"
                     />
@@ -351,7 +350,7 @@ export default function CalculatorResults() {
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <div className="h-40 relative">
                     <img
-                      src="/placeholder.svg?height=160&width=300"
+                      src="/educationprogrammes.jpeg?height=160&width=300"
                       alt="Education programs"
                       className="w-full h-full object-cover"
                     />
@@ -396,7 +395,7 @@ export default function CalculatorResults() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div className="relative h-64">
                     <img
-                      src="/placeholder.svg?height=256&width=400"
+                      src="/ocean1.jpg?height=256&width=400"
                       alt="Ocean cleanup"
                       className="w-full h-full object-cover rounded-lg"
                     />
@@ -447,7 +446,10 @@ export default function CalculatorResults() {
                 <img src="/placeholder.svg?height=40&width=40" alt="Coffee cup" className="h-10 w-10 mr-3" />
                 <h2 className="text-xl font-bold">Make a positive impact—for the price of one coffee per week.</h2>
               </div>
+              <div>
               <Button className="bg-green-500 hover:bg-green-600 text-white px-6">Subscribe for Rs. 299</Button>
+              </div>
+              
             </div>
 
             <div className="bg-white rounded-lg shadow-sm p-6 mb-12">

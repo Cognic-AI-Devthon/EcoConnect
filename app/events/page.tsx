@@ -300,6 +300,7 @@ export default function CleanupEventsPage() {
 
           {/* Pagination */}
           {/* <div className="flex justify-center items-center mt-8">
+          {/* <div className="flex justify-center items-center mt-8">
             <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center mr-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -340,6 +341,7 @@ export default function CleanupEventsPage() {
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </button>
+          </div>
           </div> */}
         </div>
       </div>

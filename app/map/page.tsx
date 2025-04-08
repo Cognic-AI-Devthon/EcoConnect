@@ -245,7 +245,7 @@ export default function RecycleMapPage() {
 
             <div className="flex flex-col items-center justify-center bg-white rounded-lg p-6 shadow-sm h-fit">
               <div className="mb-6">
-                <img src="/placeholder.svg?height=200&width=200" alt="Recycling illustration" className="w-40 h-auto" />
+                <img src="/bulb.png?height=200&width=200" alt="Recycling illustration" className="w-40 h-auto" />
               </div>
               <h3 className="text-xl font-bold text-center mb-2">
                 Recycling 1 kg of plastic saves 5.774 kWh—enough to power a light bulb for 240 hours!
