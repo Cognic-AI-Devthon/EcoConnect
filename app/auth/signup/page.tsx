@@ -2,19 +2,25 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import Sidebar from "@/components/sidebar"
-import { auth } from "../../../../lib/firebase"
+import { auth } from "../../../lib/firebase"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useRouter } from "next/navigation"
 import Toast2 from "@/components/ui/custom_toast"
+import { createUser } from "../../../lib/db/users"
+import { User } from "../../../types/user"
+import { useSearchParams } from "next/navigation"
 
 export default function SignupPage() {
+
+  const params = useSearchParams()
+
   const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -26,6 +32,15 @@ export default function SignupPage() {
   const [toastMesaage, setToastMessage] = useState("")
   const [toastOpen, setToastOpen] = useState(false)
   const [toastType, setToastType] = useState<"success" | "error" | "info">("info");
+  const [plan, setPlan] = useState("Free")
+
+  useEffect(() => {
+    const planParam = params.get("plan")
+    // console.log("plan", params.get("plan"))
+    if (planParam) {
+      setPlan(planParam)
+    }
+  }, [params])
 
   const showToast = (message: string, type: "success" | "error" | "info") => {
     setToastMessage(message);
@@ -53,23 +68,43 @@ export default function SignupPage() {
       showToast("You must agree to the terms and conditions", "error")
       return
     }
-
-    const res = await createUserWithEmailAndPassword(auth, email, password)
-    console.log(res)
-    if (res.user) {
-      // alert("Signup successful")
-      showToast("Signup successful", "success")
-      setName("")
-      setEmail("")
-      setPassword("")
-      setConfirmPassword("")
-      setAgreeToTerms(false)
-      setShowPassword(false)
-      setShowConfirmPassword(false)
-      router.push("/auth/login")
-    } else {
-      // alert("Something went wrong")
-      showToast("Something went wrong", "error")
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password)
+      console.log(res)
+      if (res.user) {
+        const user: User = {
+          id: res.user.uid,
+          name: name || '', // Fallback to empty string if displayName is null
+          email: res.user.email || '',     // Fallback to empty string if email is null
+          profilePicture: res.user.photoURL || '', // Fallback to empty string if photoURL is null
+          joinDate: new Date().toISOString(), // Or use metadata.creationTime if available
+          role: "regular", // Default to regular, adjust as needed
+          subscriptionPlan: plan, // Default to Free
+          ecoPoints: 0, // Initialize to 0
+          todaysPoints: 0, // Initialize to 0
+          streakCount: 0, // Initialize to 0
+          badges: [] // Initialize empty array
+        } as User;
+        await createUser(res.user.uid, user)
+        // alert("Signup successful")
+        showToast("Signup successful", "success")
+        setName("")
+        setEmail("")
+        setPassword("")
+        setConfirmPassword("")
+        setAgreeToTerms(false)
+        setShowPassword(false)
+        setShowConfirmPassword(false)
+        await auth.signOut()
+        localStorage.removeItem("user")
+        router.push("/auth/login")
+      } else {
+        // alert("Something went wrong")
+        showToast("Something went wrong", "error")
+      }
+    } catch (err) {
+      // alert(err.message)
+      showToast("Signup Error", "error")
     }
     console.log("Signup attempt with:", { name, email, password, confirmPassword, agreeToTerms })
   }

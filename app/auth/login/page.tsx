@@ -82,7 +82,7 @@ export default function LoginPage() {
               <button className="flex-1 py-4 text-center font-medium border-b-2 border-blue-500 text-gray-800">
                 Sign In
               </button>
-              <Link href="/auth/signup" className="flex-1 py-4 text-center font-medium bg-gray-100 text-gray-500">
+              <Link href="/calculator" className="flex-1 py-4 text-center font-medium bg-gray-100 text-gray-500">
                 Sign Up
               </Link>
             </div>
