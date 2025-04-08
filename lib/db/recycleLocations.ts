@@ -35,7 +35,11 @@ export const getRecycleLocationById = async (locationId: string): Promise<Recycl
 // Get all recycle locations
 export const getAllRecycleLocations = async (): Promise<RecycleLocation[]> => {
   const querySnapshot = await getDocs(locationsCollection)
-  return querySnapshot.docs.map((doc) => doc.data() as RecycleLocation)
+  return querySnapshot.docs.map((doc) => {
+    const temp = doc.data() as RecycleLocation
+    temp.id = doc.id
+    return temp
+  })
 }
 
 // Get locations by material type
@@ -62,25 +66,25 @@ export const deleteRecycleLocation = async (locationId: string): Promise<void> =
 }
 
 // Add a rating to a location
-export const addRatingToLocation = async (locationId: string, userId: string, rating: number): Promise<void> => {
-  const locationRef = doc(db, "recycleLocations", locationId)
-  const locationSnap = await getDoc(locationRef)
+// export const addRatingToLocation = async (locationId: string, userId: string, rating: number): Promise<void> => {
+//   const locationRef = doc(db, "recycleLocations", locationId)
+//   const locationSnap = await getDoc(locationRef)
 
-  if (locationSnap.exists()) {
-    const location = locationSnap.data() as RecycleLocation
-    const ratings = location.ratings || {}
+//   if (locationSnap.exists()) {
+//     const location = locationSnap.data() as RecycleLocation
+//     const ratings = location.ratings || {}
 
-    // Add or update the user's rating
-    ratings[userId] = rating
+//     // Add or update the user's rating
+//     ratings[userId] = rating
 
-    // Calculate the average rating
-    const ratingValues = Object.values(ratings)
-    const averageRating = ratingValues.reduce((sum, val) => sum + val, 0) / ratingValues.length
+//     // Calculate the average rating
+//     const ratingValues = Object.values(ratings)
+//     const averageRating = ratingValues.reduce((sum, val) => sum + val, 0) / ratingValues.length
 
-    await updateDoc(locationRef, {
-      ratings,
-      averageRating,
-    })
-  }
-}
+//     await updateDoc(locationRef, {
+//       ratings,
+//       averageRating,
+//     })
+//   }
+// }
 
