@@ -4,12 +4,7 @@ export interface BlogPost {
   id: string
   title: string
   content: string
-  author: {
-    id: string
-    name: string
-    role: string
-    avatar: string
-  }
+  author: string
   publishDate: Timestamp
   tags: string[]
   imageUrl: string

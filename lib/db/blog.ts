@@ -22,7 +22,7 @@ const blogCollection = collection(db, "blogPosts")
 
 // Create a new blog post
 export const createBlogPost = async (
-  postData: Omit<BlogPost, "id" | "publishDate">,
+  postData: Omit<BlogPost, "id" | "imageUrl" | "publishDate">,
   imageFile?: File,
 ): Promise<string> => {
   const postId = uuidv4()
@@ -65,7 +65,11 @@ export const getAllBlogPosts = async (): Promise<BlogPost[]> => {
   const q = query(blogCollection, orderBy("publishDate", "desc"))
 
   const querySnapshot = await getDocs(q)
-  return querySnapshot.docs.map((doc) => doc.data() as BlogPost)
+  return querySnapshot.docs.map((doc) => {
+    const temp = doc.data() as BlogPost
+    temp.id = doc.id
+    return temp
+  })
 }
 
 // Get blog posts by tag

@@ -48,10 +48,14 @@ export const getEduVideoById = async (videoId: string): Promise<EduVideo | null>
 
 // Get all educational videos
 export const getAllEduVideos = async (): Promise<EduVideo[]> => {
-  const q = query(videosCollection, orderBy("publishedDate", "desc"))
+  const q = query(videosCollection, orderBy("publishDate", "desc"))
 
   const querySnapshot = await getDocs(q)
-  return querySnapshot.docs.map((doc) => doc.data() as EduVideo)
+  return querySnapshot.docs.map((doc) => {
+    const temp = doc.data() as EduVideo
+    temp.id = doc.id
+    return temp
+  })
 }
 
 // Get videos by category
