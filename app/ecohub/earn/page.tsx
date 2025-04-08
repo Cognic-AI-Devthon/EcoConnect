@@ -210,7 +210,7 @@ export default function EarnPage() {
               </div>
               <div className="relative w-40 h-40 md:w-60 md:h-60">
                 <img
-                  src="/placeholder.svg?height=240&width=240"
+                  src="/rewards.png?height=360&width=360"
                   alt="Eco Store"
                   className="w-full h-full object-contain"
                 />

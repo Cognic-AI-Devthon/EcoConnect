@@ -151,7 +151,7 @@ export default function EduHub() {
               style={{ transform: "translateY(0) rotate(5deg)" }}
             >
               <img
-                src="/placeholder.svg?height=400&width=200"
+                src="/bottle1.png?height=400&width=200"
                 alt="Plastic bottle floating"
                 className="h-[400px] w-auto opacity-70"
               />
@@ -182,7 +182,7 @@ export default function EduHub() {
             <div className="relative h-[300px]">
               <div className="absolute inset-0 flex items-center justify-center">
                 <img
-                  src="/placeholder.svg?height=300&width=400"
+                  src="/Ocean-plastic-waste-Large.jpg?height=300&width=400"
                   alt="Plastic journey visualization"
                   className="max-w-full h-auto"
                 />
@@ -195,7 +195,7 @@ export default function EduHub() {
         <section className="py-12 container mx-auto px-6">
           <div className="bg-white rounded-lg shadow-sm p-6 flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center mb-4 md:mb-0">
-              <img src="/placeholder.svg?height=100&width=100" alt="Eco Quiz Mascots" className="h-24 w-auto mr-6" />
+              <img src="/quiz.png?height=100&width=100" alt="Eco Quiz Mascots" className="h-24 w-auto mr-6" />
               <div>
                 <h2 className="text-blue-600 text-2xl font-bold">
                   TAKE TODAY'S

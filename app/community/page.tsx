@@ -15,7 +15,7 @@ export default function CommunityPage() {
       date: "22 MAR 2025",
       time: "11 A.M. - 12:30 P.M.",
       location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=150&width=200",
+      image: "/cleanup.png?height=150&width=200",
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export default function CommunityPage() {
       date: "22 MAR 2025",
       time: "11 A.M. - 12:30 P.M.",
       location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=150&width=200",
+      image: "/cleanup.png?height=150&width=200",
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ export default function CommunityPage() {
       date: "22 MAR 2025",
       time: "11 A.M. - 12:30 P.M.",
       location: "NEW BRIGHTON, MERSEYSIDE",
-      image: "/placeholder.svg?height=150&width=200",
+      image: "/cleanup.png?height=150&width=200",
     },
   ]
 
@@ -71,14 +71,14 @@ export default function CommunityPage() {
       user: {
         name: "Emily Anderson",
         username: "@emilyanderson",
-        avatar: "/placeholder.svg?height=50&width=50",
+        avatar: "/women.svg?height=50&width=50",
         verified: true,
       },
       date: "May 29",
       content:
         "Joined an amazing beach cleanup at Nilaveli Beach! 🌊✨ It was such a great experience working with a passionate community to protect our oceans. Proud to be part of this impactful event! 💙💚",
       hashtags: ["#BeachCleanup", "#PlasticFreeOceans", "#SustainableLiving", "#EcoWarriors", "#NilaveliBeach"],
-      image: "/placeholder.svg?height=300&width=500",
+      image: "/oceancleanups.jpg?height=300&width=500",
       likes: "36.3k",
       comments: "13.1k",
       shares: "97.4k",
@@ -88,14 +88,14 @@ export default function CommunityPage() {
       user: {
         name: "Piyumi Nisansala",
         username: "@piyuminisansala",
-        avatar: "/placeholder.svg?height=50&width=50",
+        avatar: "/women.svg?height=50&width=50",
         verified: true,
       },
       date: "May 29",
       content:
         "\"Just got my hands on a bamboo water bottle from EcoMarket, and I'm loving it! 💧🌿 Not only does it look great, but the water feels so refreshing too. Small swaps like this make a big impact. 💚",
       hashtags: ["#SustainableLiving", "#EcoFriendly", "#PlasticFree", "#BambooBottle", "#StayHydrated"],
-      image: "/placeholder.svg?height=300&width=500",
+      image: "/bamboo.jpeg?height=300&width=500",
       likes: "36.3k",
       comments: "13.1k",
       shares: "97.4k",
@@ -107,25 +107,25 @@ export default function CommunityPage() {
       id: 1,
       name: "Olivia Anderson",
       role: "Environmentalist",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/women.svg?height=60&width=60",
     },
     {
       id: 2,
       name: "Thomas Baker",
       role: "Researcher",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/men.svg?height=60&width=60",
     },
     {
       id: 3,
       name: "Lily Lee",
       role: "Graphic Designer",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/men.svg?height=60&width=60",
     },
     {
       id: 4,
       name: "Andrew Harris",
       role: "Social Influencer",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/women.svg?height=60&width=60",
     },
   ]
 
@@ -162,7 +162,7 @@ export default function CommunityPage() {
               <div className="flex items-start mb-4">
                 <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
                   <img
-                    src="/placeholder.svg?height=40&width=40"
+                    src="/men.svg?height=40&width=40"
                     alt="User avatar"
                     className="w-full h-full object-cover"
                   />
@@ -356,7 +356,7 @@ export default function CommunityPage() {
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
               <h2 className="font-bold mb-3">Nearby Recycle Centers</h2>
               <div className="mb-4 rounded-lg overflow-hidden">
-                <img src="/placeholder.svg?height=150&width=300" alt="Map" className="w-full h-auto" />
+                <img src="/map2.png?height=150&width=300" alt="Map" className="w-full h-auto" />
               </div>
 
               <div className="space-y-4">

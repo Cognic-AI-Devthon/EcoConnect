@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { ArrowUp, ArrowDown, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import CalculatorSidebar from "@/components/calculator-sidebar"
+
 
 // Define the question structure
 type Question = {
@@ -77,13 +77,6 @@ const questions: Question[] = [
       { label: "A lot", value: "20", description: "16+ items" },
       { label: "Custom", value: "custom", custom: true },
     ],
-    icons: {
-      "Long flights": "/placeholder.svg?height=50&width=50",
-      Diet: "/placeholder.svg?height=50&width=50",
-      "Red meat": "/placeholder.svg?height=50&width=50",
-      "Other protein": "/placeholder.svg?height=50&width=50",
-      Dairy: "/placeholder.svg?height=50&width=50",
-    },
   },
   {
     id: "toiletries",
@@ -250,8 +243,8 @@ export default function PlasticCalculator() {
   return (
     <div className="flex-1 p-6 md:p-12">
       <div className="flex">
-        <div className="hidden md:block w-64 mr-8">
-          <CalculatorSidebar currentFootprint="0.1" />
+        <div className="hidden md:block w-40 mr-8">
+          
         </div>
 
         <div className="flex-1">
