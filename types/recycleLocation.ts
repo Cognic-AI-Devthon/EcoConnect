@@ -4,22 +4,12 @@ export interface RecycleLocation {
   id: string
   name: string
   address: string
-  location: GeoPoint
+  lan: number
+  lat: number
+  // location: GeoPoint
   acceptedMaterials: string[]
-  operatingHours: {
-    monday?: string
-    tuesday?: string
-    wednesday?: string
-    thursday?: string
-    friday?: string
-    saturday?: string
-    sunday?: string
-  }
+  operatingHours: string
   contactInfo: string
-  website?: string
-  ratings?: {
-    [userId: string]: number
-  }
-  averageRating?: number
+  website: string
+  rating: number
 }
-

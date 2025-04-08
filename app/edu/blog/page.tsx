@@ -113,7 +113,7 @@ const blogPosts = [
 export default function BlogIndex() {
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <main className="flex-1 p-6">
         <div className="max-w-6xl mx-auto">

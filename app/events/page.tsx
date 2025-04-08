@@ -238,12 +238,12 @@ export default function CleanupEventsPage() {
             </div>
           </div>
 
-          <div className="absolute left-10 bottom-10">
+          {/* <div className="absolute left-10 bottom-10">
             <img src="/placeholder.svg?height=100&width=100" alt="Starfish" className="h-20 w-auto" />
           </div>
           <div className="absolute left-32 bottom-16">
             <img src="/placeholder.svg?height=80&width=80" alt="Shell" className="h-16 w-auto" />
-          </div>
+          </div> */}
         </div>
 
         {/* Events List */}
