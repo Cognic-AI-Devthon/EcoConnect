@@ -5,151 +5,152 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import { ArrowLeft, Twitter, Linkedin, Facebook } from "lucide-react"
 import Sidebar from "@/components/sidebar"
+import { getBlogPostById } from "../../../../lib/db/blog"
 
 // Mock blog data - in a real app, this would come from a CMS or API
-const blogPosts = [
-  {
-    slug: "invisible-intruder-microplastics",
-    title: "Invisible Intruder: Microplastics in Our Food Chain",
-    date: "July 4th, 2024",
-    author: {
-      name: "Landon Brand",
-      role: "Research Scientist",
-      avatar: "/placeholder.svg?height=50&width=50",
-    },
-    image: "/placeholder.svg?height=400&width=800",
-    content: [
-      {
-        type: "paragraph",
-        content:
-          "Microplastics, tiny particles smaller than 5mm, are silently making their way into our food chain. The journey of these particles is causing growing concern, and here's why we should pay attention.",
-      },
-      {
-        type: "heading",
-        content: "Becoming a Public Benefit Corporation",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Microplastics are fragments of larger plastic objects that break down over time. These particles originate from everyday items like plastic bottles, bags, and packaging. Once these plastics start to degrade, they can spread through air, water, and soil, infiltrating our natural environments.",
-      },
-      {
-        type: "heading",
-        content: "How Microplastics Enter Our Food Chain",
-      },
-      {
-        type: "callout",
-        content:
-          "The scary part? Microplastics are showing up in the foods we consume every day, like seafood, salt, honey, and even drinking water.",
-      },
-      {
-        type: "paragraph",
-        content:
-          "As marine life and animals ingest these particles, they can enter our diets without us even knowing. Though research is still ongoing, scientists are concerned about the potential risks. These particles could carry harmful chemicals that may affect our health in ways we don't yet fully understand, from immune system issues to reproductive problems.",
-      },
-      {
-        type: "heading",
-        content: "Health Risks of Microplastics",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Although research is still ongoing, the potential risks are concerning. Microplastics can carry harmful chemicals, which may have adverse effects on our immune system, reproductive health, and other aspects of our well-being.",
-      },
-      {
-        type: "callout",
-        content:
-          "The long-term impact of ingesting these particles remains uncertain, but scientists warn against the possible dangers.",
-      },
-      {
-        type: "heading",
-        content: "What Can We Do About It?",
-      },
-      {
-        type: "paragraph",
-        content:
-          "This invisible threat calls for action. Reducing our dependence on plastics, improving recycling systems, and raising awareness about the dangers of plastic pollution can help reduce the amount of microplastics in our food chain. By taking these steps, we can protect our health and the environment for future generations.",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Let's work together to reduce plastic waste and stop microplastics from becoming a permanent part of our food chain.",
-      },
-    ],
-  },
-  {
-    slug: "from-streets-to-lake",
-    title: "From Town Streets to Lake Depths: How Plastic Finds Its Way",
-    date: "June 28th, 2024",
-    author: {
-      name: "Maya Johnson",
-      role: "Environmental Journalist",
-      avatar: "/placeholder.svg?height=50&width=50",
-    },
-    image: "/placeholder.svg?height=400&width=800",
-    content: [
-      {
-        type: "paragraph",
-        content:
-          "Have you ever wondered how a plastic wrapper discarded on a city street ends up in a remote lake or ocean? The journey is both fascinating and alarming, revealing the interconnectedness of our ecosystems and the far-reaching impact of our everyday actions.",
-      },
-    ],
-  },
-  {
-    slug: "natures-cry-plastic-pollution",
-    title: "Nature's Cry: The Devastating Impact of Plastic Pollution",
-    date: "June 15th, 2024",
-    author: {
-      name: "Dr. Samuel Chen",
-      role: "Marine Biologist",
-      avatar: "/placeholder.svg?height=50&width=50",
-    },
-    image: "/placeholder.svg?height=400&width=800",
-    content: [
-      {
-        type: "paragraph",
-        content:
-          "From entangled sea turtles to birds with stomachs full of plastic debris, the evidence of plastic pollution's impact on wildlife is heartbreaking and undeniable. This article explores the devastating effects plastic is having on ecosystems worldwide.",
-      },
-    ],
-  },
-  {
-    slug: "breaking-plastic-habit",
-    title: "Breaking the Plastic Habit: Converting Paying the Price to a Sustainable Lifestyle",
-    date: "May 30th, 2024",
-    author: {
-      name: "Olivia Martinez",
-      role: "Sustainability Coach",
-      avatar: "/placeholder.svg?height=50&width=50",
-    },
-    image: "/placeholder.svg?height=400&width=800",
-    content: [
-      {
-        type: "paragraph",
-        content:
-          "Breaking free from plastic dependency isn't just good for the planet—it can be liberating for you too. This guide provides practical, achievable steps to reduce your plastic consumption and transition to a more sustainable lifestyle.",
-      },
-    ],
-  },
-  {
-    slug: "reinventing-packaging",
-    title: "Reinventing Packaging: The Rise of Plastic-Free Alternatives",
-    date: "May 18th, 2024",
-    author: {
-      name: "James Wilson",
-      role: "Innovation Researcher",
-      avatar: "/placeholder.svg?height=50&width=50",
-    },
-    image: "/placeholder.svg?height=400&width=800",
-    content: [
-      {
-        type: "paragraph",
-        content:
-          "From mushroom-based packaging to edible wrappers, innovative companies are revolutionizing how products are packaged. Discover the cutting-edge alternatives that are helping reduce our reliance on plastic packaging.",
-      },
-    ],
-  },
-]
+// const blogPosts = [
+//   {
+//     slug: "invisible-intruder-microplastics",
+//     title: "Invisible Intruder: Microplastics in Our Food Chain",
+//     date: "July 4th, 2024",
+//     author: {
+//       name: "Landon Brand",
+//       role: "Research Scientist",
+//       avatar: "/placeholder.svg?height=50&width=50",
+//     },
+//     image: "/placeholder.svg?height=400&width=800",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content:
+//           "Microplastics, tiny particles smaller than 5mm, are silently making their way into our food chain. The journey of these particles is causing growing concern, and here's why we should pay attention.",
+//       },
+//       {
+//         type: "heading",
+//         content: "Becoming a Public Benefit Corporation",
+//       },
+//       {
+//         type: "paragraph",
+//         content:
+//           "Microplastics are fragments of larger plastic objects that break down over time. These particles originate from everyday items like plastic bottles, bags, and packaging. Once these plastics start to degrade, they can spread through air, water, and soil, infiltrating our natural environments.",
+//       },
+//       {
+//         type: "heading",
+//         content: "How Microplastics Enter Our Food Chain",
+//       },
+//       {
+//         type: "callout",
+//         content:
+//           "The scary part? Microplastics are showing up in the foods we consume every day, like seafood, salt, honey, and even drinking water.",
+//       },
+//       {
+//         type: "paragraph",
+//         content:
+//           "As marine life and animals ingest these particles, they can enter our diets without us even knowing. Though research is still ongoing, scientists are concerned about the potential risks. These particles could carry harmful chemicals that may affect our health in ways we don't yet fully understand, from immune system issues to reproductive problems.",
+//       },
+//       {
+//         type: "heading",
+//         content: "Health Risks of Microplastics",
+//       },
+//       {
+//         type: "paragraph",
+//         content:
+//           "Although research is still ongoing, the potential risks are concerning. Microplastics can carry harmful chemicals, which may have adverse effects on our immune system, reproductive health, and other aspects of our well-being.",
+//       },
+//       {
+//         type: "callout",
+//         content:
+//           "The long-term impact of ingesting these particles remains uncertain, but scientists warn against the possible dangers.",
+//       },
+//       {
+//         type: "heading",
+//         content: "What Can We Do About It?",
+//       },
+//       {
+//         type: "paragraph",
+//         content:
+//           "This invisible threat calls for action. Reducing our dependence on plastics, improving recycling systems, and raising awareness about the dangers of plastic pollution can help reduce the amount of microplastics in our food chain. By taking these steps, we can protect our health and the environment for future generations.",
+//       },
+//       {
+//         type: "paragraph",
+//         content:
+//           "Let's work together to reduce plastic waste and stop microplastics from becoming a permanent part of our food chain.",
+//       },
+//     ],
+//   },
+//   {
+//     slug: "from-streets-to-lake",
+//     title: "From Town Streets to Lake Depths: How Plastic Finds Its Way",
+//     date: "June 28th, 2024",
+//     author: {
+//       name: "Maya Johnson",
+//       role: "Environmental Journalist",
+//       avatar: "/placeholder.svg?height=50&width=50",
+//     },
+//     image: "/placeholder.svg?height=400&width=800",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content:
+//           "Have you ever wondered how a plastic wrapper discarded on a city street ends up in a remote lake or ocean? The journey is both fascinating and alarming, revealing the interconnectedness of our ecosystems and the far-reaching impact of our everyday actions.",
+//       },
+//     ],
+//   },
+//   {
+//     slug: "natures-cry-plastic-pollution",
+//     title: "Nature's Cry: The Devastating Impact of Plastic Pollution",
+//     date: "June 15th, 2024",
+//     author: {
+//       name: "Dr. Samuel Chen",
+//       role: "Marine Biologist",
+//       avatar: "/placeholder.svg?height=50&width=50",
+//     },
+//     image: "/placeholder.svg?height=400&width=800",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content:
+//           "From entangled sea turtles to birds with stomachs full of plastic debris, the evidence of plastic pollution's impact on wildlife is heartbreaking and undeniable. This article explores the devastating effects plastic is having on ecosystems worldwide.",
+//       },
+//     ],
+//   },
+//   {
+//     slug: "breaking-plastic-habit",
+//     title: "Breaking the Plastic Habit: Converting Paying the Price to a Sustainable Lifestyle",
+//     date: "May 30th, 2024",
+//     author: {
+//       name: "Olivia Martinez",
+//       role: "Sustainability Coach",
+//       avatar: "/placeholder.svg?height=50&width=50",
+//     },
+//     image: "/placeholder.svg?height=400&width=800",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content:
+//           "Breaking free from plastic dependency isn't just good for the planet—it can be liberating for you too. This guide provides practical, achievable steps to reduce your plastic consumption and transition to a more sustainable lifestyle.",
+//       },
+//     ],
+//   },
+//   {
+//     slug: "reinventing-packaging",
+//     title: "Reinventing Packaging: The Rise of Plastic-Free Alternatives",
+//     date: "May 18th, 2024",
+//     author: {
+//       name: "James Wilson",
+//       role: "Innovation Researcher",
+//       avatar: "/placeholder.svg?height=50&width=50",
+//     },
+//     image: "/placeholder.svg?height=400&width=800",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content:
+//           "From mushroom-based packaging to edible wrappers, innovative companies are revolutionizing how products are packaged. Discover the cutting-edge alternatives that are helping reduce our reliance on plastic packaging.",
+//       },
+//     ],
+//   },
+// ]
 
 export default function BlogPost() {
   const params = useParams()
@@ -159,15 +160,20 @@ export default function BlogPost() {
 
   useEffect(() => {
     // In a real app, this would be an API call
-    const foundPost = blogPosts.find((post) => post.slug === slug)
-    setPost(foundPost)
-    setLoading(false)
+    initializeData()
   }, [slug])
+
+  const initializeData = async () => {
+    setLoading(true)
+    const res = await getBlogPostById(slug as string)
+    setPost(res)
+    setLoading(false)
+  }
 
   if (loading) {
     return (
       <div className="flex min-h-screen bg-[#f5f5f5]">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="flex-1 p-6">
           <div className="max-w-3xl mx-auto">
             <div className="animate-pulse">
@@ -187,7 +193,7 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="flex min-h-screen bg-[#f5f5f5]">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="flex-1 p-6">
           <div className="max-w-3xl mx-auto text-center py-12">
             <h1 className="text-2xl font-bold mb-4">Article Not Found</h1>
@@ -203,7 +209,7 @@ export default function BlogPost() {
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
-      
+
       <main className="flex-1">
         <div className="p-6">
           <div className="max-w-3xl mx-auto">
@@ -223,11 +229,11 @@ export default function BlogPost() {
                 <div className="flex items-center">
                   <img
                     src={post.author.avatar || "/placeholder.svg"}
-                    alt={post.author.name}
+                    alt={post.author}
                     className="w-10 h-10 rounded-full mr-3"
                   />
                   <div>
-                    <div className="font-medium">{post.author.name}</div>
+                    <div className="font-medium">{post.author}</div>
                     <div className="text-sm text-gray-500">{post.author.role}</div>
                   </div>
                 </div>
@@ -245,30 +251,47 @@ export default function BlogPost() {
                 </div>
               </div>
             </div>
-
             <div className="prose max-w-none">
-              {post.content.map((section: any, index: number) => {
-                if (section.type === "paragraph") {
-                  return (
-                    <p key={index} className="mb-6 text-gray-800">
-                      {section.content}
+
+              {/* Tags */}
+              {post.tags && post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {post.tags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Main Content */}
+              <div className="text-gray-700 leading-relaxed">
+                {post.content.split('\n').map((paragraph: string, index: string) => (
+                  <p key={index} className="mb-4">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              {/* Author and Date */}
+              <div className="mt-12 pt-6 border-t border-gray-200">
+                <div className="flex items-center">
+                  <img
+                    src={post.author.avatar || "/placeholder.svg"}
+                    alt={post.author}
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-medium text-gray-900">{post.author}</h4>
+                    <p className="text-sm text-gray-500">
+                      Published on {post.publishDate}
                     </p>
-                  )
-                } else if (section.type === "heading") {
-                  return (
-                    <h2 key={index} className="text-xl font-bold mt-8 mb-4">
-                      {section.content}
-                    </h2>
-                  )
-                } else if (section.type === "callout") {
-                  return (
-                    <blockquote key={index} className="border-l-4 border-orange-500 pl-4 py-2 my-6 bg-orange-50">
-                      <p className="italic text-gray-800">{section.content}</p>
-                    </blockquote>
-                  )
-                }
-                return null
-              })}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -389,3 +412,25 @@ export default function BlogPost() {
   )
 }
 
+/* {post.content.map((section: any, index: number) => {
+                if (section.type === "paragraph") {
+                  return (
+                    <p key={index} className="mb-6 text-gray-800">
+                      {section.content}
+                    </p>
+                  )
+                } else if (section.type === "heading") {
+                  return (
+                    <h2 key={index} className="text-xl font-bold mt-8 mb-4">
+                      {section.content}
+                    </h2>
+                  )
+                } else if (section.type === "callout") {
+                  return (
+                    <blockquote key={index} className="border-l-4 border-orange-500 pl-4 py-2 my-6 bg-orange-50">
+                      <p className="italic text-gray-800">{section.content}</p>
+                    </blockquote>
+                  )
+                }
+                return null
+              })} */
