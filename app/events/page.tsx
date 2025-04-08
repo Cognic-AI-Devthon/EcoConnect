@@ -73,6 +73,9 @@ export default function CleanupEventsPage() {
   };
 
   useEffect(() => {
+    if (localStorage.getItem("user") === null) {
+      router.push("/auth/login")
+    }
     setIsLoading(true)
     initializeData();
   }, []);

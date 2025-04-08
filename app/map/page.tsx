@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { MapPin } from "lucide-react"
-// import Sidebar from "@/components/sidebar" // Removed Sidebar import
+import { useRouter } from "next/navigation"// import Sidebar from "@/components/sidebar" // Removed Sidebar import
 
 type RecycleCenter = {
   id: number
@@ -23,10 +23,14 @@ type RecycleCenter = {
 export default function RecycleMapPage() {
   const [selectedCenter, setSelectedCenter] = useState<RecycleCenter | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     // In a real app, we would get the user's location
     // For demo purposes, we'll set a default location
+    if (localStorage.getItem("user") === null) {
+      router.push("/auth/login")
+    }
     setUserLocation({ lat: 6.9271, lng: 79.8612 }) // Colombo, Sri Lanka
   }, [])
 
@@ -201,12 +205,6 @@ export default function RecycleMapPage() {
                     <button className="flex items-center justify-center w-24 p-2 bg-blue-100 rounded-md text-blue-600 text-sm">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        stroke
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"

@@ -112,6 +112,20 @@ export default function Sidebar() {
 
       <nav className="flex-1 mt-6 overflow-y-auto">
         <ul className="space-y-2 px-2">
+          {!user && (
+            <li>
+              <Link
+                href="/auth/login"
+                className={cn(
+                  "flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-600 transition-colors",
+                  !expanded && "justify-center"
+                )}
+              >
+                <LogIn className={cn("flex-shrink-0", expanded ? "h-5 w-5" : "h-7 w-7")} />
+                {expanded && <span className="ml-3">Sign In</span>}
+              </Link>
+            </li>
+          )}
           {navItems.map((item, index) => (
             <li key={index}>
               <Link
@@ -140,7 +154,7 @@ export default function Sidebar() {
             </Link>
           </li>
 
-          {user ? (
+          {user && (
             <li>
               <button
                 onClick={handleSignOut}
@@ -152,19 +166,6 @@ export default function Sidebar() {
                 <LogOut className={cn("flex-shrink-0", expanded ? "h-5 w-5" : "h-7 w-7")} />
                 {expanded && <span className="ml-3">Sign Out</span>}
               </button>
-            </li>
-          ) : (
-            <li>
-              <Link
-                href="/auth/login"
-                className={cn(
-                  "flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-600 transition-colors",
-                  !expanded && "justify-center"
-                )}
-              >
-                <LogIn className={cn("flex-shrink-0", expanded ? "h-5 w-5" : "h-7 w-7")} />
-                {expanded && <span className="ml-3">Sign In</span>}
-              </Link>
             </li>
           )}
         </ul>

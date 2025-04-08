@@ -60,11 +60,11 @@ export const getUsersByRole = async (role: string): Promise<User[]> => {
 }
 
 // Get top users by eco points
-export const getTopUsersByEcoPoints = async (limit = 10): Promise<User[]> => {
-  const q = query(usersCollection, where("ecoPoints", ">", 0), limit)
-  const querySnapshot = await getDocs(q)
-  return querySnapshot.docs.map((doc) => doc.data() as User)
-}
+// export const getTopUsersByEcoPoints = async (limit = 10): Promise<User[]> => {
+//   const q = query(usersCollection, where("ecoPoints", ">", 0), limit)
+//   const querySnapshot = await getDocs(q)
+//   return querySnapshot.docs.map((doc) => doc.data() as User)
+// }
 
 // Add eco points to a user
 export const addEcoPoints = async (userId: string, points: number): Promise<void> => {

@@ -22,7 +22,7 @@ export default function CalculatorResults() {
   }
 
   const handleSignup = (plan: string) => {
-    router.push(`/auth/signup/${plan}`)
+    router.push(`/auth/signup?plan=${plan}`);
   }
 
   return (
