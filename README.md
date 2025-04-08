@@ -85,7 +85,7 @@ This project is licensed under the MIT License.
 
 ### Contact
 For any inquiries or support, please contact us at:
-Email: cognicai@gmail.com 
+Email: teamcognic.ai@gmail.com 
 
 ### Acknowledgments
 Special thanks to all contributors and supporters who make EcoConnect possible!
