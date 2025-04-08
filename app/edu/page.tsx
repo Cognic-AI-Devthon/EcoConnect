@@ -4,13 +4,17 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Play, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { EduVideo } from "../../types/eduVideo"
+import { getAllEduVideos } from "../../lib/db/eduVideos"
 
 export default function EduHub() {
   const [isVisible, setIsVisible] = useState(false)
   const bottleRef = useRef<HTMLDivElement>(null)
+  const [ecoVideos, setEcoVideos] = useState<EduVideo[]>([])
 
   useEffect(() => {
     setIsVisible(true)
+    initializeData()
 
     // Floating animation for the bottle
     const bottle = bottleRef.current
@@ -29,6 +33,18 @@ export default function EduHub() {
       return () => cancelAnimationFrame(animationId)
     }
   }, [])
+
+  const initializeData = async () => {
+    try {
+      const data = await getAllEduVideos()
+      setEcoVideos(data)
+    }
+    catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+
+    }
+  }
 
   const featuredArticles = [
     {
@@ -68,32 +84,32 @@ export default function EduHub() {
     },
   ]
 
-  const ecoVideos = [
-    {
-      id: "video1",
-      title: "From Town Streets to Lake Depths",
-      subtitle: "How Plastic Finds Its Way",
-      thumbnail: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: "video2",
-      title: "From Town Streets to Lake Depths",
-      subtitle: "How Plastic Finds Its Way",
-      thumbnail: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: "video3",
-      title: "From Town Streets to Lake Depths",
-      subtitle: "How Plastic Finds Its Way",
-      thumbnail: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: "video4",
-      title: "From Town Streets to Lake Depths",
-      subtitle: "How Plastic Finds Its Way",
-      thumbnail: "/placeholder.svg?height=200&width=300",
-    },
-  ]
+  // const ecoVideos = [
+  //   {
+  //     id: "video1",
+  //     title: "From Town Streets to Lake Depths",
+  //     subtitle: "How Plastic Finds Its Way",
+  //     thumbnail: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: "video2",
+  //     title: "From Town Streets to Lake Depths",
+  //     subtitle: "How Plastic Finds Its Way",
+  //     thumbnail: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: "video3",
+  //     title: "From Town Streets to Lake Depths",
+  //     subtitle: "How Plastic Finds Its Way",
+  //     thumbnail: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: "video4",
+  //     title: "From Town Streets to Lake Depths",
+  //     subtitle: "How Plastic Finds Its Way",
+  //     thumbnail: "/placeholder.svg?height=200&width=300",
+  //   },
+  // ]
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -101,9 +117,8 @@ export default function EduHub() {
         {/* Hero Section with Animated Bottle */}
         <section className="relative h-[500px] bg-black overflow-hidden">
           <div
-            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${
-              isVisible ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"
+              }`}
           >
             <div className="absolute top-[15%] left-[10%] z-10">
               <h1 className="text-[80px] font-bold text-[#e6ff00] leading-none">2050</h1>
@@ -224,26 +239,64 @@ export default function EduHub() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {ecoVideos.map((video) => (
-              <div key={video.id} className="relative group">
-                <div className="relative h-48 overflow-hidden rounded-lg">
-                  <img
-                    src={video.thumbnail || "/placeholder.svg"}
-                    alt={video.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                    <button className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white group-hover:bg-green-600 transition-colors">
-                      <Play className="h-6 w-6" />
-                    </button>
+            {ecoVideos.map((video) => {
+              // Extract YouTube video ID if it's a YouTube URL
+              const getVideoId = (url: string) => {
+                if (url.includes('youtube.com/watch?v=')) {
+                  return url.split('v=')[1].split('&')[0];
+                }
+                if (url.includes('youtu.be/')) {
+                  return url.split('youtu.be/')[1].split('?')[0];
+                }
+                return null;
+              };
+
+              const videoId = getVideoId(video.url);
+              const embedUrl = videoId
+                ? `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`
+                : video.url;
+
+              return (
+                <div key={video.id} className="relative group">
+                  <div className="relative h-48 overflow-hidden rounded-lg bg-gray-200">
+                    {videoId ? (
+                      <iframe
+                        src={embedUrl}
+                        title={video.title}
+                        className="w-full h-full object-cover"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      // Fallback for non-YouTube videos
+                      <iframe
+                        src={video.url}
+                        title={video.title}
+                        className="w-full h-full object-cover"
+                        frameBorder="0"
+                        allowFullScreen
+                      />
+                    )}
+
+                    {/* Play button overlay (hidden when using iframe) */}
+                    <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+                        <Play className="h-6 w-6" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <h3 className="text-sm font-medium">{video.title}</h3>
+                    {video.duration && (
+                      <p className="text-xs text-gray-500">
+                        {Math.floor(video.duration / 60)}:{String(video.duration % 60).padStart(2, '0')}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="mt-2">
-                  <h3 className="text-sm font-medium">{video.title}</h3>
-                  <p className="text-xs text-gray-600">{video.subtitle}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 

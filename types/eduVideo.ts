@@ -4,11 +4,11 @@ export interface EduVideo {
   id: string
   title: string
   description: string
-  videoUrl: string
-  thumbnailUrl: string
-  duration: number // in seconds
-  category: string
-  tags: string[]
+  url: string
+  thumbnailUrl?: string
+  duration?: number // in seconds
+  category?: string
+  tags?: string[]
   publishedDate: Timestamp
 }
 
