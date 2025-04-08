@@ -1,16 +1,20 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, use } from "react"
 import Link from "next/link"
 import { Play, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EduVideo } from "../../types/eduVideo"
+import { BlogPost } from "../../types/blog"
 import { getAllEduVideos } from "../../lib/db/eduVideos"
+import { getAllBlogPosts } from "../../lib/db/blog"
 
 export default function EduHub() {
   const [isVisible, setIsVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const bottleRef = useRef<HTMLDivElement>(null)
   const [ecoVideos, setEcoVideos] = useState<EduVideo[]>([])
+  const [featuredArticles, setFeaturedArticles] = useState<BlogPost[]>([])
 
   useEffect(() => {
     setIsVisible(true)
@@ -35,54 +39,57 @@ export default function EduHub() {
   }, [])
 
   const initializeData = async () => {
+    setIsLoading(true)
     try {
       const data = await getAllEduVideos()
       setEcoVideos(data)
+      const blogPosts = await getAllBlogPosts()
+      setFeaturedArticles(blogPosts)
     }
     catch (error) {
       console.error('Error fetching data:', error)
     } finally {
-
+      setIsLoading(false)
     }
   }
 
-  const featuredArticles = [
-    {
-      id: "from-streets-to-lake",
-      title: "From Town Streets to Lake Depths: How Plastic Finds Its Way",
-      image: "/placeholder.svg?height=200&width=300",
-      excerpt: "Tracing the journey of plastic waste from urban areas to our precious water bodies.",
-      slug: "from-streets-to-lake",
-    },
-    {
-      id: "natures-cry",
-      title: "Nature's Cry: The Devastating Impact of Plastic Pollution",
-      image: "/placeholder.svg?height=200&width=300",
-      excerpt: "Exploring how plastic pollution is affecting wildlife and ecosystems worldwide.",
-      slug: "natures-cry-plastic-pollution",
-    },
-    {
-      id: "breaking-plastic-habit",
-      title: "Breaking the Plastic Habit: Converting Paying the Price to a Sustainable Lifestyle",
-      image: "/placeholder.svg?height=200&width=300",
-      excerpt: "Practical steps to reduce your plastic consumption and live more sustainably.",
-      slug: "breaking-plastic-habit",
-    },
-    {
-      id: "reinventing-packaging",
-      title: "Reinventing Packaging: The Rise of Plastic-Free Alternatives",
-      image: "/placeholder.svg?height=200&width=300",
-      excerpt: "Innovative solutions that are replacing traditional plastic packaging.",
-      slug: "reinventing-packaging",
-    },
-    {
-      id: "invisible-intruder",
-      title: "Invisible Intruder: Microplastics in Our Food Chain",
-      image: "/placeholder.svg?height=200&width=300",
-      excerpt: "How tiny plastic particles are making their way into what we eat and drink.",
-      slug: "invisible-intruder-microplastics",
-    },
-  ]
+  // const featuredArticles = [
+  //   {
+  //     id: "from-streets-to-lake",
+  //     title: "From Town Streets to Lake Depths: How Plastic Finds Its Way",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //     excerpt: "Tracing the journey of plastic waste from urban areas to our precious water bodies.",
+  //     slug: "from-streets-to-lake",
+  //   },
+  //   {
+  //     id: "natures-cry",
+  //     title: "Nature's Cry: The Devastating Impact of Plastic Pollution",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //     excerpt: "Exploring how plastic pollution is affecting wildlife and ecosystems worldwide.",
+  //     slug: "natures-cry-plastic-pollution",
+  //   },
+  //   {
+  //     id: "breaking-plastic-habit",
+  //     title: "Breaking the Plastic Habit: Converting Paying the Price to a Sustainable Lifestyle",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //     excerpt: "Practical steps to reduce your plastic consumption and live more sustainably.",
+  //     slug: "breaking-plastic-habit",
+  //   },
+  //   {
+  //     id: "reinventing-packaging",
+  //     title: "Reinventing Packaging: The Rise of Plastic-Free Alternatives",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //     excerpt: "Innovative solutions that are replacing traditional plastic packaging.",
+  //     slug: "reinventing-packaging",
+  //   },
+  //   {
+  //     id: "invisible-intruder",
+  //     title: "Invisible Intruder: Microplastics in Our Food Chain",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //     excerpt: "How tiny plastic particles are making their way into what we eat and drink.",
+  //     slug: "invisible-intruder-microplastics",
+  //   },
+  // ]
 
   // const ecoVideos = [
   //   {
@@ -111,6 +118,17 @@ export default function EduHub() {
   //   },
   // ]
 
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#f5f5f5]">
+      <div className="flex-1">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-gray-300 border-t-green-500 rounded-full animate-spin"></div>
+          </div>
+        )}
+      </div>
+    </div>
+  }
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       <main className="flex-1">
@@ -208,11 +226,11 @@ export default function EduHub() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredArticles.slice(0, 6).map((article) => (
-              <Link href={`/edu/blog/${article.slug}`} key={article.id} className="group">
+              <Link href={`/edu/blog/${article.id}`} key={article.id} className="group">
                 <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <div className="h-48 overflow-hidden">
                     <img
-                      src={article.image || "/placeholder.svg"}
+                      src={article.imageUrl || "/placeholder.svg"}
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -221,7 +239,7 @@ export default function EduHub() {
                     <h3 className="text-lg font-semibold mb-2 group-hover:text-green-600 transition-colors line-clamp-2">
                       {article.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.excerpt}</p>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.author}</p>
                     <div className="flex items-center text-green-600 text-sm font-medium">
                       Read more <ArrowRight className="ml-1 h-4 w-4" />
                     </div>
