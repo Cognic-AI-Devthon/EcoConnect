@@ -15,6 +15,8 @@ type Message = {
   timestamp: Date
 }
 
+type Language = "english" | "sinhala" | "tamil"
+
 export default function EcoAssistPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -28,6 +30,7 @@ export default function EcoAssistPage() {
 
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>("english")
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
@@ -47,13 +50,14 @@ export default function EcoAssistPage() {
 
     try {
       // Call chat endpoint
-      const response = await fetch("http://localhost:8001/chat", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API_ENDPOINT}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: userMessage.content
+          message: userMessage.content,
+          language: selectedLanguage
         }),
       })
 
@@ -115,7 +119,19 @@ export default function EcoAssistPage() {
       {/* Header */}
       <div className="bg-green-500 py-3 px-6 flex items-center justify-between">
         <div className="flex items-center text-white font-bold text-xl">Eco Assist</div>
-        <LanguageSelector />
+        <div className="flex items-center gap-4">
+          <label className="text-white mr-2">Select your chat language:</label>
+          <select 
+            value={selectedLanguage}
+            onChange={(e) => setSelectedLanguage(e.target.value as Language)}
+            className="bg-white text-gray-800 rounded px-2 py-1"
+          >
+            <option value="english">English</option>
+            <option value="sinhala">සිංහල</option>
+            <option value="tamil">தமிழ்</option>
+          </select>
+          <LanguageSelector />
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
