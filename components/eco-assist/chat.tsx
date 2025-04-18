@@ -55,32 +55,33 @@ export default function EcoAssistChat({ onClose }: { onClose: () => void }) {
     // Simulate bot typing
     setIsTyping(true)
 
-    // Simulate bot response after a delay
-    setTimeout(() => {
+    // Call chat endpoint with language set to English
+    setTimeout(async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API_ENDPOINT}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: userMessage.content,
+          language: "english"
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await response.json();
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: getBotResponse(inputValue),
+        content: data.response, // Assuming the response contains the bot's reply
         sender: "bot",
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, botMessage])
-      setIsTyping(false)
-    }, 1500)
-  }
-
-  const getBotResponse = (userInput: string): string => {
-    // Simple response logic - in a real app, this would call an AI service
-    const input = userInput.toLowerCase()
-
-    if (input.includes("hello") || input.includes("hi")) {
-      return "Hello there! How can I help you with your sustainability journey today?"
-    } else if (input.includes("plastic") || input.includes("recycle")) {
-      return "Reducing plastic use is crucial for our oceans! Try using reusable bags, bottles, and containers. Did you know that by 2050, there could be more plastic than fish in the ocean by weight?"
-    } else if (input.includes("carbon") || input.includes("footprint")) {
-      return "Your carbon footprint is the total amount of greenhouse gases you produce. You can reduce it by using public transport, eating less meat, and being mindful of your energy consumption."
-    } else {
-      return "That's an interesting question about sustainability. Would you like me to provide more specific information about reducing waste, conserving energy, or sustainable living practices?"
-    }
+      };
+      setMessages((prev) => [...prev, botMessage]);
+      setIsTyping(false);
+    }, 1500);
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -208,4 +209,3 @@ export default function EcoAssistChat({ onClose }: { onClose: () => void }) {
     </div>
   )
 }
-
